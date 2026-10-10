@@ -9,28 +9,38 @@ tasks = [{"id": 1, "title": "Learn FastAPI", "done": False},
 
 class Task(BaseModel):
     id: int| None = None
-    title: str 
+    title: str   | None = None
     done: bool | None = None
 
 
-app = FastAPI()
+app = FastAPI(
+    title="Task API",
+    description="An API for managing tasks. This API allows you to create, read, update, and delete tasks.",
+    summary="Task API summary",
+    version="0.0.1",
+    terms_of_service="http://example.com/terms/",
+    license_info={
+        "name": "Apache 2.0",
+        "url": "https://www.apache.org/licenses/LICENSE-2.0.html",
+    },
+)
 
 
 
-@app.get("/")
+@app.get("/", description="Returns a welcome message and API information.")
 def hello():
-    return {"name": "Task API", "version": "1.0.0","endpoints":["/tasks"]}
+    return {"name": "Task API", "version": "0.0.1","endpoints":["/tasks"]}
 
-@app.get("/health")
+@app.get("/health",description="Returns the health status of the API.")
 def health():
     return {"status": "ok"}
 
 
-@app.get("/tasks")
+@app.get("/tasks",description="Returns a list of all tasks.")
 def get_tasks():
     return tasks
 
-@app.get("/tasks/{id}")
+@app.get("/tasks/{id}",description="Returns a specific task by ID.")
 def get_task(id:int):
     for task in tasks:
         if task["id"] == id:
@@ -38,7 +48,7 @@ def get_task(id:int):
     raise HTTPException(status_code=404, detail="Task not found")
 
 
-@app.post("/tasks", status_code=status.HTTP_201_CREATED)
+@app.post("/tasks", status_code=status.HTTP_201_CREATED,description="Creates a new task.")
 def create_task(task: Task):
         if task.title == "" or task.title is None or task.title == " ":
             raise HTTPException(status_code=400, detail="Task title cannot be empty")
@@ -49,3 +59,34 @@ def create_task(task: Task):
             tasks.append((task.model_dump()))
    
         return task
+
+@app.put("/tasks/{id}", description="Updates a specific task by ID.")
+def update_task(id: int, task: Task):
+    for t in tasks:
+        if t["id"] == id:
+
+            if task.title is not None:
+                if not task.title.strip():
+                    raise HTTPException(
+                        status_code=400,
+                        detail="Task title cannot be empty"
+                    )
+                t["title"] = task.title
+
+            if task.done is not None:
+                t["done"] = task.done
+
+            return t
+
+    raise HTTPException(status_code=404, detail="Task not found")
+
+
+@app.delete("/tasks/{id}", status_code=status.HTTP_204_NO_CONTENT, description="Deletes a specific task by ID.")
+def delete_task(id: int):
+    for t in tasks:
+        if t["id"] == id:
+            tasks.remove(t)
+            return None
+
+    raise HTTPException(status_code=404, detail="Task not found")
+
