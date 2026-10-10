@@ -28,8 +28,8 @@ This API allows users to create, retrieve, update, and delete tasks. It uses in-
 **1. Clone the repository**
 
 ```bash
-git clone https://github.com/AbdalrahmanAlmalah/task-api.git
-cd task-api
+git clone https://github.com/AbdalrahmanAlmalah/to-do-list.git
+cd to-do-list
 ```
 
 Replace `AbdalrahmanAlmalah` with your GitHub username.
@@ -151,3 +151,30 @@ All tasks are stored temporarily while the server is running. Changes made throu
 FlyRank Backend Development Internship Participant
 
 **Project:** Week 2 — Build Your First CRUD API
+
+
+
+
+### Testing with curl
+
+The API was tested using cURL on port 8080.
+
+**Command:**
+
+```bash
+curl -i http://localhost:8080/tasks
+```
+
+**Actual Response:**
+
+```http
+HTTP/1.1 200 OK
+date: Sat, 10 Oct 2026 11:47:27 GMT
+server: uvicorn
+content-length: 143
+content-type: application/json
+
+[{"id":1,"title":"Learn FastAPI","done":false},{"id":2,"title":"Build a REST API","done":false},{"id":3,"title":"Deploy the API","done":false}]
+```
+
+The request returned HTTP 200 OK and the list of tasks stored in memory.
