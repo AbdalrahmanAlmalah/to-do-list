@@ -40,7 +40,7 @@ def get_task(id:int):
 
 @app.post("/tasks", status_code=status.HTTP_201_CREATED)
 def create_task(task: Task):
-        if task.title == "":
+        if task.title == "" or task.title is None or task.title == " ":
             raise HTTPException(status_code=400, detail="Task title cannot be empty")
         else:
             task.id = max(t["id"] for t in tasks) + 1 
