@@ -36,8 +36,33 @@ def health():
     return {"status": "ok"}
 
 
-@app.get("/tasks",description="Returns a list of all tasks.")
-def get_tasks():
+@app.get("/tasks", description="Returns tasks with optional filtering, search, and statistics.")
+def get_tasks(
+    done: bool | None = None,
+    stats: bool | None = None,
+    search: str | None = None
+):
+    if done is not None:
+        filtered_tasks = [task for task in tasks if task["done"] == done]
+        return filtered_tasks
+
+    if stats is not None:
+        total_tasks = len(tasks)
+        completed_tasks = len([task for task in tasks if task["done"]])
+        pending_tasks = total_tasks - completed_tasks
+
+        return {
+            "total_tasks": total_tasks,
+            "completed_tasks": completed_tasks
+        }
+
+    if search is not None:
+        tasks_search = [
+            task for task in tasks
+            if search.lower() in task["title"].lower()
+        ]
+        return tasks_search
+
     return tasks
 
 @app.get("/tasks/{id}",description="Returns a specific task by ID.")
@@ -90,3 +115,17 @@ def delete_task(id: int):
 
     raise HTTPException(status_code=404, detail="Task not found")
 
+@app.post("/reset", description="Resets all tasks to the original three example tasks.")
+def reset_tasks():
+    tasks.clear()
+
+    tasks.extend([
+        {"id": 1, "title": "Learn FastAPI", "done": False},
+        {"id": 2, "title": "Build a REST API", "done": False},
+        {"id": 3, "title": "Deploy the API", "done": False}
+    ])
+
+    return {
+        "message": "Tasks have been reset successfully.",
+        "tasks": tasks
+    }
