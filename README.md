@@ -128,9 +128,9 @@ Swagger UI allows you to test GET, POST, PUT, and DELETE requests directly from 
 
 **Swagger Screenshot**
 
-Add a screenshot of your Swagger UI page here:
 
-![Swagger UI Screenshot](screenshots/swagger.png)
+
+![Swagger UI Screenshot](swagger.png)
 
 ## Data Storage
 
