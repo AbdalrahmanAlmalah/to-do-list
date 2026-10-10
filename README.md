@@ -32,7 +32,6 @@ git clone https://github.com/AbdalrahmanAlmalah/to-do-list.git
 cd to-do-list
 ```
 
-Replace `AbdalrahmanAlmalah` with your GitHub username.
 
 **2. Create a virtual environment**
 
@@ -68,7 +67,7 @@ uvicorn main:app --reload
 
 The API will be available at:
 
-http://localhost:8000
+http://localhost:8080
 
 ## API Endpoints
 
@@ -111,10 +110,10 @@ Status Code: `201 Created`
 Use the following command to retrieve all tasks:
 
 ```bash
-curl -i http://localhost:8000/tasks
+curl -i http://localhost:8080/tasks
 ```
 
-Paste your actual terminal output here, including the HTTP status code, headers, and JSON response.
+
 
 ## Swagger UI Documentation
 
